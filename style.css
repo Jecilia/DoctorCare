@@ -1,0 +1,656 @@
+/*==== GERAL=====*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --hue: 190;
+  --primary-color: hsl(var(--hue), 100%, 26%);
+  --headline: hsl(210, 11%, 15%);
+  --paragraph: hsl(210, 9%, 31%);
+  --brand-beige: hsl(39, 100%, 97%);
+  --brand-light: hsl(calc(var(--hue) - 22), 23%, 89%);
+  --brand-light2: hsl(calc(var(--hue) + 10), 14%, 97%);
+  --brand-dark: hsl(var(--hue), 100%, 14%);
+  font-size: 62.5%; /* ((10*100)/16)=62.5) 1rem=10px */
+  --bg-light: hsl(180, 14%, 97%);
+  --nav-height: 7.2rem;
+}
+html {
+  scroll-behavior: smooth; /*comportamento do scroll suave*/
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.6rem;
+  text-align: center;
+
+  overflow: overlay; /*sobre posto*/
+  background: var(--bg-light);
+}
+
+.wrapper {
+  width: min(
+    50rem,
+    100%
+  ); /*recebe os dois valores, recebe sempre o menor valor*/
+  margin-inline: auto;
+  padding-inline: 2.4rem;
+}
+a {
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+img {
+  max-width: 100%; /*bos práticas, caso a imagem seja muito grande esse 100% pega do wrapper*/
+}
+section {
+  padding-block: 10rem; /*ele está a pegar 100px de todo o section*/
+}
+section header h1 {
+  font-size: 3.4rem;
+  color: var(--headline);
+  line-height: 130%;
+  margin-bottom: 2.4rem;
+}
+
+section header h2 {
+  font-size: 3rem;
+  line-height: 3.96rem;
+  color: var(--headline);
+}
+section header h4 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+
+  line-height: 150%;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+
+  margin-bottom: 1.6rem;
+}
+section .content p {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 150%;
+
+  color: var(--paragraph);
+}
+.button {
+  background: var(--primary-color);
+
+  border: none;
+  border-radius: 4rem;
+
+  margin-bottom: 6rem;
+
+  /* height: 6.2rem; se eu tirar a largura e altura resolve o meu problema do espaços no menu
+    width: 26.3rem;*/
+
+  padding: 1.6rem 3.2rem;
+  width: fit-content; /*lagura fica adaptada ao conteúdo*/
+
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  transition: background 200ms;
+}
+.button:hover {
+  background-color: var(--brand-dark);
+}
+.social_links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.2rem;
+}
+/*==== Custom Colors =====*/
+#services .card circle {
+  fill: var(--brand-light);
+}
+#nav .logo path[fill*="00856F"],/*vai no nav procura o logo tudo que for path que contenha o atributo fill=00856F  */
+#back circle {
+  fill: var(--primary-color);
+}
+#nav.scroll .logo path[fill*='00856F'] {
+  fill: white;
+}
+button.open-menu path[stroke*='00856F'],
+#contact li path {
+  stroke: var(--primary-color);
+}
+#nav.scroll button.open-menu path[stroke*='00856F'] {
+  stroke: white;
+}
+/*==== Navigation=====*/
+nav {
+  display: flex;
+
+  height: var(--nav-height);
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  z-index: 100; /*devido o objecto do scrollreveal, tenho que colocar z.index 100, para ficar por cima do header*/
+}
+nav.scroll {
+  background: var(--primary-color);
+}
+nav .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+nav.scroll .logo path {
+  fill: white;
+}
+nav.scroll button path {
+  stroke: white;
+}
+nav button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+nav .menu,
+nav .close-menu {
+  position: fixed;
+}
+/*==== Menu-Expanded=====*/
+body.menu-expanded {
+  overflow: hidden; 
+}
+body.menu-expanded > :not(nav) {
+  /*todos excepto o NAV*/ /* " > * "todos do primeiro nivel*/
+  visibility: hidden;
+}
+.menu,
+.close-menu,
+body.menu-expanded .open-menu {
+  opacity: 0;
+  visibility: hidden;
+}
+body.menu-expanded .menu,
+body.menu-expanded .close-menu {
+  opacity: 1;
+  visibility: visible;
+}
+.menu {
+  transform: translateY(
+    100%
+  ); /*jogo o elemento para fora da tela, 100% no eixo y vai lá para baixo*/
+}
+
+body.menu-expanded .menu {
+  top: 0;
+  left: 0;
+  background: var(--primary-color);
+
+  width: 100vw;
+  height: 100vh;
+
+  padding-top: var(--nav-height);
+
+  transition: transform 400ms; /*com o efeito da transformação na duração de 400ms*/
+  transform: translateY(0); /*coloca o elemento na tela*/
+}
+/* tiramos para não ficar relativo,RESOLVEU O MEU PROBLEMA
+body.menu-expanded nav {
+  position: relative; /*quando o menu-expanded no body, quero que o nav fica position relative 
+}*/
+.menu ul:nth-child(1) {
+  display: flex;
+  flex-direction: column;
+  gap: 4.8rem;
+
+  margin-top: 6rem;
+
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 3.1rem;
+}
+.menu ul li a {
+  color: white;
+}
+.menu .button {
+  background: white;
+  border-radius: 4rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 2.3rem;
+  text-transform: uppercase;
+
+  color: var(--primary-color);
+
+  display: inline-block;
+  padding: 1.6rem 3.2rem;
+  margin-top: 4.8rem;
+  margin-bottom: 8rem;
+}
+.menu .button:hover {
+  color: white;
+  background-color: var(--primary-color);
+  filter: brightness(1.1);
+}
+
+body.menu-expanded .logo,
+body.menu-expanded button {
+  position: relative;
+  z-index: 100;
+}
+
+body.menu-expanded .logo path {
+  fill: white;
+}
+body.menu-expanded button path {
+  stroke: white;
+}
+/*==== Home=====*/
+
+#home {
+  padding-block: 0;
+  padding-top: calc(4.1rem + var(--nav-height));
+  /*A caixa começou do doctorcare, anteriormente, estava margin-top, fazia espaço fora da caixa, agora quero que ele faça preenchimento dentro da caixa*/
+}
+#home::before {
+  content: '';
+  width: 100%;
+  height: calc(76% + var(--nav-height)); /*dele tem 76*/
+  background-color: var(--brand-light);
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+#home .button {
+  margin-inline: auto;
+}
+#home p {
+  font-size: 1.8rem;
+  line-height: 150%;
+  font-weight: 400;
+  color: var(--paragraph);
+  margin-bottom: 3.2rem;
+}
+#home img {
+  width: 26.4rem;
+  display: block;
+  margin-inline: auto;
+  object-position: 0 2rem;
+}
+#home .stats {
+  width: 100%;
+  /*height: 47rem; , tiramos e substituimos por padding.block */
+  padding-block: 4rem;
+  margin-inline: auto;
+
+  background-color: var(--brand-beige);
+  border: 1px solid var(--brand-beige);
+  border-radius: 0.6rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6rem;
+}
+#home .stat h3 {
+  font-size: 4.8rem;
+  color: var(--headline);
+  line-height: 130%;
+  margin-bottom: 0.4rem;
+}
+#home .stat p {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.6rem;
+  line-height: 150%;
+}
+
+/*==== Services=====*/
+
+#services header h2 {
+  /*width: 30.4rem; /*add sozinha, porque não estava a funcionar    TENHO UM PRQUENO PROBLEMINHA*/
+  margin-bottom: 6rem;
+}
+#services .cards {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+#services .card {
+  padding: 2.4rem;
+  text-align: left;
+
+  background: white;
+
+  border: 1px solid var(--brand-light);
+  border-radius: 0.6rem;
+}
+#services .card h3 {
+  margin-block: 1.6rem;
+}
+
+/*==== About=====*/
+
+#about {
+  text-align: left;
+  background-color: var(--brand-beige);
+}
+#about header h2 {
+  margin-bottom: 2.4rem;
+}
+#about .content p {
+  margin-block: 2.4rem 6rem;
+}
+
+/*==== Contact=====*/
+#contact {
+  text-align: left;
+}
+#contact header {
+  margin-bottom: 3.2rem;
+}
+#contact ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 3.2rem;
+}
+#contact ul li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/*==== Footer=====*/
+footer {
+  background-color: var(--primary-color);
+  padding-block: 6rem;
+  text-align: left;
+  color: white;
+}
+footer .logo {
+  display: inline-block;
+  margin-bottom: 2.4rem;
+}
+footer .logo svg {
+  width: 23.6rem;
+  height: 3.1rem;
+}
+footer .logo path {
+  fill: white;
+}
+footer p {
+  color: var(--brand-beige);
+  line-height: 2; /*Não está no figma*/
+
+  margin-bottom: 3.2rem;
+}
+footer .social_links {
+  justify-content: flex-start;
+}
+
+/*==== Back to top=====*/
+
+#back {
+  position: fixed;
+  bottom: 1rem;
+  right: 2.5rem;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100%);
+  transition: 200ms;
+}
+#back.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/*==== Resposivo=====*/
+
+@media (min-width: 1024px) {
+  /*==== GERAL=====*/
+  body {
+    overflow: auto;
+  }
+  .wrapper {
+    width: min(112rem, 100%);
+    display: grid;
+  }
+  section {
+    padding-block: 16rem;
+  }
+  section header h2{
+    font-size: 4rem;
+    line-height: 5.2rem;
+  }
+
+  /*==== NAVIGATION=====*/
+
+  /*reset*/
+  nav#nav .wrapper * {
+    margin: 0;
+    padding: 0;
+    visibility: initial; /*valor inicial*/
+    display: initial;
+    opacity: initial;
+    flex-direction: initial;
+    position: initial;
+    font-size: initial;
+    transform: initial;
+    color: initial;
+    background-color: initial;
+    font-weight: initial;
+    filter: initial;
+  }
+  .col-a {
+    grid-area: A;
+  }
+  .col-b {
+    grid-area: B;
+  }
+
+  nav#nav .close-menu,
+  nav#nav .open-menu,
+  nav#nav .social_links {
+    display: none;
+  }
+  nav#nav .menu {
+    width: 60%; /*aumentei o tamanho desta caixa para a propriedade justify-content:space-betwen funcionasse*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav#nav .menu ul:nth-child(1) {
+    display: flex;
+    gap: 3.2rem;
+  }
+  nav#nav .menu ul li a {
+    color: var(--primary-color);
+    opacity: 0.7;
+  }
+  nav#nav .menu a.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 2.4rem;
+
+    border: 1px solid var(--primary-color);
+    border-radius: 4rem;
+
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    text-transform: uppercase;
+  }
+  nav#nav .menu a.button:hover {
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+  }
+  nav#nav.scroll .menu ul li a {
+    color: var(--brand-light2);
+    opacity: 0.6;
+  }
+  nav#nav.scroll .menu a.button {
+    border-color: #ffffff;
+    color: white;
+  }
+  nav#nav .menu li a {
+    transition: opacity 0.4s;
+  }
+  nav#nav .menu li a:hover {
+    opacity: 1;
+    font-weight: 700;
+  }
+  nav#nav .menu li a::after {
+    content: '';
+    width: 0%;
+    height: 0.2rem;
+    background-color: var(--primary-color);
+
+    position: relative;
+    bottom: -2rem;
+    left: -0.9rem; /*aqui colocamos o menu no meio da barra aumentamos o preenchimento e deslocamos para esquerda*/
+    transition: width 0.2s;
+
+    display: block;
+  }  
+  nav#nav.scroll .menu li a::after {
+    background-color: white;
+  }
+
+  nav#nav .menu li a:hover::after {
+    padding-inline: 0.8rem;
+    width: 100%;
+  }
+  nav#nav.scroll .menu li a:hover {
+    opacity: 1;
+  }
+  /*o action não está a funcionar*/
+  nav#nav.scroll .menu a.button.active, 
+  nav#nav.scroll .menu a.button:hover{
+    background-color: var(--primary-color);
+    filter: brightness(1.3); /*uma clareza no fundo*/
+    border: none;
+  }
+ 
+  /*==== HOME=====*/
+  #home::before {
+    height: calc(96% - var(--nav-height)); /*no programa tem 96%*/
+  }
+  #home {
+    padding-top: var(--nav-height);
+  }
+  #home .wrapper {
+    grid-template-columns: 60.5rem 1fr;
+    grid-template-areas:
+      'A B'
+      'C C';
+  }
+  #home .col-a {
+    text-align: left;
+    align-self: center;
+  }
+  
+  #home h1 {
+    font-size: 5.2rem;
+  }
+  #home .content p {
+    font-size: 1.8rem;
+  }
+  #home .stats {
+    grid-area: C;
+    flex-direction: row; /*no stats já defini como flex*/
+    padding: 6rem;
+    gap: 0;
+  }
+  #home  .stats .stat +.stat/*procura no stats que tenha o stat + o stat anterior*/ {
+    border-left: 1px solid var(--primary-color);
+  }
+  #home .stats .stat {
+    flex: 1; /*pega e preenche por igual dependo da caixa pai "stats"*/
+  }
+  #home .button {
+    margin: 0;
+  }
+  #home img {
+    width: 42rem;
+  }
+  /*==== Services=====*/
+  #services h2{
+    width: 47rem;
+    margin-inline: auto;
+  }
+  #services .cards{
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4rem;
+  }
+  #services .card{
+    width: 30%;
+    flex-grow: 1;/*cresça suficiente para preencher o espaço que ficou*/
+  }
+   /*==== About=====*/
+   #about .wrapper{
+    grid-template-columns: 48rem 1fr;
+    grid-template-areas: 'B A';
+    gap: 6.7rem;
+   }
+   #about .col-a{
+    align-self: center;
+   }
+   #about .content p{
+    margin-bottom: 0;
+   }
+    /*==== Contact=====*/
+    #contact .wrapper{
+      grid-template-columns: 1fr 57.5rem;
+      grid-template-areas: 'A B';
+
+    }
+    #contact h2{
+      width: 40.4rem;
+    }
+    /*==== Footer=====*/
+    footer{
+      padding-bottom: 8rem;
+    }
+    footer .wrapper{
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: 'A B';
+    }
+    footer .col-a {
+      align-self: center;
+    }
+    footer .col-b {
+      align-self: center;
+      justify-self: end;
+    }
+
+    footer p{
+      margin-bottom:0 ;
+    }
+}
